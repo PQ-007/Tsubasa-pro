@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        navbar_icon: "bg-primary text-primary-foreground rounded-[8px] hover:text-accent-foreground",
+        navbar_icon: "bg-inherit round-[8px] w-[78px] h-[70px]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
