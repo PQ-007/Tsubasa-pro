@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-import { PiBookOpenDuotone, PiGraduationCapDuotone } from "react-icons/pi";
+import { PiBookOpenDuotone} from "react-icons/pi";
 
 
 import routes from '@/Routes/routes';

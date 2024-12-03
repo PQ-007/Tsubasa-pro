@@ -1,26 +1,29 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
-import { Button } from "@/components/ui/button"
+
 import routes from "./Routes/routes";
+import Sidebarv2 from "./components/Sidebarv2";
+import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
 
 const App = () => {
   return (
     <Router>
-
-      <div className="flex">
-        <Sidebar/>
-  
-        <div className="flex-1 p-4">
-    
-          <Routes>
-            {routes.map(({ path, component: Component }, index) => (
-              <Route key={index} path={path} element={<Component />} />
-            ))}
-          </Routes>
-     
+        <SidebarProvider>
+          <div className="flex">
+            <Sidebarv2/>  
+            {/* <SidebarTrigger/> */}
+            <Routes>
+                  {routes.map(({ path, component: Component }, index) => (
+                    <Route key={index} path={path} element={<Component />} />
+                  ))}
+                </Routes>
+           
         </div>
+        </SidebarProvider>
+         
         
-      </div>
+        
+      
     </Router>
   );
 };
