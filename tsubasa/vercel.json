@@ -1,17 +1,10 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
-  ],
+  ]
   
   
-  "builds": [
-    {
-      "src": "tsubasa/package.json",
-      "use": "@vercel/node",
-      "config": { "distDir": "tsubasa/dist" }
-    }
-  ],
-  "installCommand": "cd tsubasa && npm install",
-  "buildCommand": "cd tsubasa && npm run build"
+  
+  
   
 }
