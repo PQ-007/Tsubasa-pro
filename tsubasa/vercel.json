@@ -12,6 +12,6 @@
     }
   ],
   "installCommand": "cd tsubasa && npm install",
-  "buildCommand": "cd tsuabsa && npm run build"
+  "buildCommand": "cd tsubasa && npm run build"
   
 }
