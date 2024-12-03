@@ -3,14 +3,15 @@
     { "source": "/(.*)", "destination": "/" }
   ],
   
+  
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/node"
+      "src": "tsubasa/package.json",
+      "use": "@vercel/node",
+      "config": { "distDir": "tsubasa/dist" }
     }
   ],
-  "installCommand": "npm install"
-  
-  
+  "installCommand": "cd tsubasa && npm install",
+  "buildCommand": "cd tsuabsa && npm run build"
   
 }
