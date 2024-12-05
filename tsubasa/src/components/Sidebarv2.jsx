@@ -25,8 +25,9 @@ import {
 export function Sidebarv2() {
   const { open } = useSidebar();
   return (
+    
     <div className="flex flex-col items-center ">
-      <Sidebar collapsible="icon" className=" text-white">
+      <Sidebar collapsible="icon" className=" text-white ">
         
         <SidebarContent>
           <SidebarGroup>
@@ -63,7 +64,7 @@ export function Sidebarv2() {
                                   className={`flex items-center justify-center ${open ? '' : 'w-full'} 
                                   }`}
                                 >
-                                  <Icon className="w-8 h-8" /> {/* Adjusted icon size */}
+                                  <Icon className="w-8 h-8" /> 
                                 </div>
                                 {open ? name : ""}
                               </SidebarMenuButton>
