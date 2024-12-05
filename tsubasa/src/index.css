@@ -79,3 +79,17 @@
   }
 }
 
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./assets/fonts/gilroy-medium.ttf') format('truetype'); /* Adjust path */
+  font-weight: 500; /* Medium weight */
+  font-style: normal;
+}
+* {
+  user-select: none; /* Prevent text selection */
+}
+
+[contenteditable="true"], textarea, input {
+  user-select: text; /* Allow text selection for editable elements */
+}
+
