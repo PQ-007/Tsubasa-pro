@@ -1,5 +1,7 @@
-const Courses = () => {
-  return <div>Courses</div>;
-};
+import React from 'react'
 
-export default Courses;
+export const index = () => {
+  return (
+    <div>index</div>
+  )
+}
