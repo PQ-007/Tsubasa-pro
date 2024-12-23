@@ -1,4 +1,9 @@
+import { Bell, Search, Settings, MoreVertical, Check, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MyCourses = () => {
   // State management
