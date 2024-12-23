@@ -7,7 +7,7 @@ const routes = [
     path: "/todo",
     name: "Todo List",
     component: TodoListPage,
-    icon: /* your chosen icon */,
+    // icon: /* your chosen icon */,
   },
   {
     path: "/flashcards",
