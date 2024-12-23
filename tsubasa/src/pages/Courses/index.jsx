@@ -1,9 +1,22 @@
-import React from 'react'
+import React from "react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import FilterableCards from "./cardsData.jsx";
 
-const index = () => {
+
+const Courses = () => {
   return (
-    <div>index</div>
-  )
-}
+    <div className="flex flex-col h-screen">
+      <div className="flex items-center">
+        <SidebarTrigger />
+        <h1 className="text-[#141a2e] font-gilroy text-3xl">Courses</h1>
+      </div>
 
-export default index
+      <div className="flex-grow">
+        <FilterableCards />
+       
+      </div>
+    </div>
+  );
+};
+
+export default Courses;
