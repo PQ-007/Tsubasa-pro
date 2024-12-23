@@ -1,7 +1,4 @@
-
-
-
-
+import { useState } from "react";
 
 const MyCourses = () => {
   // State management
