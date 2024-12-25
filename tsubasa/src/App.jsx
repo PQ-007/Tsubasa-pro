@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import routes, { hiddenRoutes } from "./Routes/routes";
 import Sidebarv2 from "./components/Sidebarv2";
 import { SidebarProvider } from "./components/ui/sidebar";
+import CourseDetail from "./pages/Courses/CourseDetail";
 
 const App = () => {
   return (
