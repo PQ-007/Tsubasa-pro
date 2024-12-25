@@ -11,6 +11,7 @@ import * as React from "react";
 import { Bell, Settings, Search } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Input } from "@/components/ui/input";
+import CourseDetail from "./pages/Courses/CourseDetail";
 
 const App = () => {
   const [title, setTitle] = React.useState("Dashboard");

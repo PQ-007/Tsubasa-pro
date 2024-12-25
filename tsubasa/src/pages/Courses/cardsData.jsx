@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-
-const cardsData = [
+export const cardsData = [
   {
     id: 1,
     title: "Хичээл 1",
     description: "Туршилтын хичээл",
-    lessons: 12,
+    lessons: 21,
     quizzes: 7,
     author: "Соронзонболд",
     category: "Category A",
@@ -15,7 +15,7 @@ const cardsData = [
     id: 2,
     title: "Хичээл 2",
     description: "Үйлдлийн систем",
-    lessons: 10,
+    lessons: 17,
     quizzes: 5,
     author: "Золзаяа",
     category: "Category B",
@@ -66,7 +66,7 @@ const cardsData = [
     category: "Category B",
   },
   {
-    id: 6,
+    id: 8,
     title: "Хичээл 8",
     description: "Англи хэл",
     lessons: 5,
@@ -77,10 +77,9 @@ const cardsData = [
   
 ];
 
-const FilterableCards = () => {
+const FilterableCards = ({ onCourseClick }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCard, setSelectedCard] = useState(null);
 
   const categories = ["All", "Category A", "Category B", "Category C"];
 
@@ -94,7 +93,7 @@ const FilterableCards = () => {
   });
 
   const handleCardClick = (card) => {
-    setSelectedCard(card);
+    onCourseClick(card.id);
   };
 
   return (
@@ -150,14 +149,6 @@ const FilterableCards = () => {
           </div>
         ))}
       </div>
-
-      {/* Selected Card Content */}
-      {selectedCard && (
-        <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-          <h2 className="text-xl font-bold">{selectedCard.title}</h2>
-          <p className="mt-2">{selectedCard.content}</p>
-        </div>
-      )}
     </div>
   );
 };
