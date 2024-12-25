@@ -62,38 +62,56 @@ const FlashcardPage = () => {
 
   const handleCreateSet = () => {
     if (!newSetTitle.trim()) return;
-    setStudySets([
-      ...studySets,
-      { id: Date.now(), title: newSetTitle, cards: [] },
-    ]);
+
+    const newSet = {
+      id: Date.now(),
+      title: newSetTitle,
+      cards: [],
+    };
+
+    setStudySets((prevSets) => [...prevSets, newSet]);
     setNewSetTitle("");
   };
 
   const handleAddCard = () => {
     if (!newCard.question.trim() || !newCard.answer.trim()) return;
-    const updatedSets = studySets.map((set) =>
-      set.id === activeSet.id
-        ? {
-            ...set,
-            cards: [...set.cards, { ...newCard, id: Date.now() }],
-          }
-        : set
+
+    setStudySets((prevSets) =>
+      prevSets.map((set) =>
+        set.id === activeSet.id
+          ? {
+              ...set,
+              cards: [...set.cards, { ...newCard, id: Date.now() }],
+            }
+          : set
+      )
     );
-    setStudySets(updatedSets);
+
+    setActiveSet((prevSet) => ({
+      ...prevSet,
+      cards: [...prevSet.cards, { ...newCard, id: Date.now() }],
+    }));
+
     setNewCard({ question: "", answer: "" });
     setShowNewCardForm(false);
   };
 
   const handleDeleteCard = (cardId) => {
-    const updatedSets = studySets.map((set) =>
-      set.id === activeSet.id
-        ? {
-            ...set,
-            cards: set.cards.filter((card) => card.id !== cardId),
-          }
-        : set
+    setStudySets((prevSets) =>
+      prevSets.map((set) =>
+        set.id === activeSet.id
+          ? {
+              ...set,
+              cards: set.cards.filter((card) => card.id !== cardId),
+            }
+          : set
+      )
     );
-    setStudySets(updatedSets);
+
+    setActiveSet((prevSet) => ({
+      ...prevSet,
+      cards: prevSet.cards.filter((card) => card.id !== cardId),
+    }));
   };
 
   const handleFlip = () => {
@@ -124,37 +142,59 @@ const FlashcardPage = () => {
 
     const newCards = bulkText
       .split("\n")
+      .filter((line) => line.includes("|"))
       .map((line) => {
-        const [question, answer] = line.split("|").map((s) => s.trim());
-        return question && answer
-          ? { id: Date.now() + Math.random(), question, answer }
-          : null;
-      })
-      .filter(Boolean);
+        const [question, answer] = line.split("|").map((str) => str.trim());
+        return {
+          id: Date.now() + Math.random(),
+          question,
+          answer,
+        };
+      });
 
-    const updatedSets = studySets.map((set) =>
-      set.id === activeSet.id
-        ? { ...set, cards: [...set.cards, ...newCards] }
-        : set
+    if (newCards.length === 0) return;
+
+    setStudySets((prevSets) =>
+      prevSets.map((set) =>
+        set.id === activeSet.id
+          ? {
+              ...set,
+              cards: [...set.cards, ...newCards],
+            }
+          : set
+      )
     );
 
-    setStudySets(updatedSets);
+    setActiveSet((prevSet) => ({
+      ...prevSet,
+      cards: [...prevSet.cards, ...newCards],
+    }));
+
     setBulkText("");
     setBulkUploadOpen(false);
   };
 
-  const handleInlineEdit = (cardId, field, value) => {
-    const updatedSets = studySets.map((set) =>
-      set.id === activeSet.id
-        ? {
-            ...set,
-            cards: set.cards.map((card) =>
-              card.id === cardId ? { ...card, [field]: value } : card
-            ),
-          }
-        : set
+  const handleEditCard = (cardId, updatedCard) => {
+    setStudySets((prevSets) =>
+      prevSets.map((set) =>
+        set.id === activeSet.id
+          ? {
+              ...set,
+              cards: set.cards.map((card) =>
+                card.id === cardId ? { ...card, ...updatedCard } : card
+              ),
+            }
+          : set
+      )
     );
-    setStudySets(updatedSets);
+
+    setActiveSet((prevSet) => ({
+      ...prevSet,
+      cards: prevSet.cards.map((card) =>
+        card.id === cardId ? { ...card, ...updatedCard } : card
+      ),
+    }));
+
     setEditingCard(null);
   };
 
