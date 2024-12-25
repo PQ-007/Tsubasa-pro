@@ -4,10 +4,12 @@ import Courses from "@/pages/Courses";
 import Settings from "@/pages/Settings";
 import TodoListPage from "@/pages/TodoList";
 import FlashcardPage from "@/pages/Flashcards";
+import CourseDetail from "@/pages/Courses/CourseDetail";
 import { MdOutlineDashboard, MdOutlineSettings } from "react-icons/md";
 import { LuGraduationCap } from "react-icons/lu";
 import { PiLightbulbFilament } from "react-icons/pi";
 
+// Main routes (shown in sidebar)
 const routes = [
   {
     path: "/",
@@ -44,6 +46,10 @@ export const hiddenRoutes = [
   {
     path: "/flashcards",
     component: FlashcardPage,
+  },
+  {
+    path: "/courses/:courseId",
+    component: CourseDetail,
   },
 ];
 
