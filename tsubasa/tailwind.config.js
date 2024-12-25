@@ -1,3 +1,5 @@
+import animate from "tailwindcss-animate";
+
 /** @type {import('tailwindcss').Config} */
 import tailwindcssAnimate from 'tailwindcss-animate';
 
@@ -11,7 +13,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        gilroy: ['Gilroy', 'sans-serif'],
+        gilroy: ["Gilroy", "sans-serif"],
       },
       borderRadius: {
         lg: 'var(--radius)',
