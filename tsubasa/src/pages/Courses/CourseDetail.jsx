@@ -1,16 +1,125 @@
-import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { cardsData } from "./cardsData";
+import ReactMarkdown from "react-markdown";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState('lesson-1');
+  const [showAnswers, setShowAnswers] = useState({});
   
-  const course = cardsData.find(course => course.id === parseInt(courseId));
+  const currentCourseId = parseInt(courseId);
+  const course = cardsData.find(course => course.id === currentCourseId);
 
-  if (!course) {
-    return <div>Course not found</div>;
-  }
+  // Get previous and next course IDs
+  const previousCourseId = cardsData.find(c => c.id === currentCourseId - 1)?.id;
+  const nextCourseId = cardsData.find(c => c.id === currentCourseId + 1)?.id;
+
+  // Handle navigation between courses
+  const handleCourseNavigation = (direction) => {
+    if (direction === 'next' && nextCourseId) {
+      navigate(`/courses/${nextCourseId}`);
+      // Keep the same lesson/quiz tab when changing courses
+      setActiveItem(activeItem);
+    } else if (direction === 'prev' && previousCourseId) {
+      navigate(`/courses/${previousCourseId}`);
+      // Keep the same lesson/quiz tab when changing courses
+      setActiveItem(activeItem);
+    }
+  };
+
+  // Handle lesson/quiz tab clicks
+  const handleItemClick = (type, number) => {
+    setActiveItem(`${type}-${number}`);
+  };
+
+  // Toggle answer visibility for a specific question
+  const toggleAnswer = (questionId) => {
+    setShowAnswers(prev => ({
+      ...prev,
+      [questionId]: !prev[questionId]
+    }));
+  };
+
+  // Render quiz content
+  const renderQuizContent = (quiz) => {
+    return (
+      <div className="space-y-8">
+        <h2 className="text-2xl font-bold mb-6">{quiz.title}</h2>
+        {quiz.questions.map((question) => (
+          <div key={question.id} className="bg-white rounded-lg shadow-md p-6">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold mb-3">
+                {question.id}. {question.question}
+              </h3>
+              <div className="space-y-2">
+                {question.options.map((option, index) => (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-lg border ${
+                      showAnswers[question.id] && question.correctAnswer === index
+                        ? 'bg-green-100 border-green-500'
+                        : 'bg-gray-50 border-gray-200'
+                    }`}
+                  >
+                    {['a', 'b', 'c', 'd'][index]}) {option}
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => toggleAnswer(question.id)}
+                className="px-4 py-2 text-sm rounded-lg transition-colors
+                  bg-blue-500 text-white hover:bg-blue-600"
+              >
+                {showAnswers[question.id] ? 'Хариуг нуух' : 'Хариуг харах'}
+              </button>
+              
+              {showAnswers[question.id] && (
+                <div className="text-green-600">
+                  <span className="font-semibold">Тайлбар: </span>
+                  {question.explanation}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Add this function to render markdown content
+  const renderMarkdown = (content) => {
+    return (
+      <div className="prose prose-blue max-w-none">
+        <ReactMarkdown
+          children={content}
+          components={{
+            code({node, inline, className, children, ...props}) {
+              const match = /language-(\w+)/.exec(className || '')
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  children={String(children).replace(/\n$/, '')}
+                  language={match[1]}
+                  PreTag="div"
+                  {...props}
+                />
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              )
+            }
+          }}
+        />
+      </div>
+    )
+  };
 
   return (
     <div className="flex h-screen">
@@ -19,7 +128,7 @@ const CourseDetail = () => {
         <div className="p-4">
           <button 
             onClick={() => navigate(-1)} 
-            className="flex items-center text-gray-600 mb-6"
+            className="flex items-center text-gray-600 mb-6 hover:text-blue-600 transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
@@ -32,101 +141,118 @@ const CourseDetail = () => {
           {/* Lesson List */}
           <div className="space-y-2">
             {Array.from({length: course.lessons}, (_, i) => (
-              <div key={i} className={i === 0 ? "bg-blue-500 text-white p-3 rounded" : "p-3 hover:bg-gray-100 rounded cursor-pointer"}>
+              <button
+                key={`lesson-${i + 1}`}
+                onClick={() => handleItemClick('lesson', i + 1)}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  activeItem === `lesson-${i + 1}`
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
                 Lesson {i + 1}
-              </div>
+              </button>
             ))}
+            
             {Array.from({length: course.quizzes}, (_, i) => (
-              <div key={`quiz-${i}`} className="p-3 hover:bg-gray-100 rounded cursor-pointer text-orange-500">
+              <button
+                key={`quiz-${i + 1}`}
+                onClick={() => handleItemClick('quiz', i + 1)}
+                className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  activeItem === `quiz-${i + 1}`
+                    ? 'bg-orange-500 text-white'
+                    : 'hover:bg-orange-50 text-orange-500'
+                }`}
+              >
                 Quiz {i + 1}
-              </div>
+              </button>
             ))}
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
-        {/* Top Navigation */}
-        <div className="flex justify-between items-center p-4 border-b">
-          <h1 className="text-2xl font-bold">{course.title}</h1>
-          <div className="flex items-center space-x-4">
-            <input
-              type="text"
-              placeholder="search"
-              className="border rounded-full px-4 py-2 text-sm"
-            />
-            <button className="p-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-4.215A2 2 0 0016.76 11H7.24a2 2 0 00-1.835 1.785L4 17h5m6-6a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </button>
-            <button className="p-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Course Content */}
-        <div className="p-6">
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-2">{course.title}</h2>
-            <p className="text-gray-600 mb-4">{course.description}</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500">Author</p>
-                <p className="font-medium">{course.author}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500">Category</p>
-                <p className="font-medium">{course.category}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500">Total Lessons</p>
-                <p className="font-medium">{course.lessons}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500">Total Quizzes</p>
-                <p className="font-medium">{course.quizzes}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Course Overview */}
-          <div className="space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4">Course Overview</h3>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-medium text-gray-700">Course Structure:</h4>
-                  <ul className="list-disc list-inside text-gray-600 ml-4">
-                    <li>{course.lessons} comprehensive lessons</li>
-                    <li>{course.quizzes} assessment quizzes</li>
-                  </ul>
+      <div className="flex-1 overflow-y-auto bg-gray-50">
+        <div className="max-w-4xl mx-auto p-6">
+          {activeItem.startsWith('quiz') ? (
+            // Quiz Content
+            activeItem === 'quiz-1' && course.quiz1 ? (
+              renderQuizContent(course.quiz1)
+            ) : activeItem === 'quiz-2' && course.quiz2 ? (
+              renderQuizContent(course.quiz2)
+            ) : (
+              <div>Quiz content not available</div>
+            )
+          ) : (
+            // Lesson Content
+            <>
+              {/* Video Section */}
+              <div className="mb-8">
+                <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
+                  <iframe
+                    src={course.videoUrl}
+                    title={course.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  ></iframe>
                 </div>
-                <div>
-                  <h4 className="font-medium text-gray-700">What You'll Learn:</h4>
+              </div>
+
+              {/* Course Content */}
+              <div className="space-y-6">
+                {/* Brief Description Card */}
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <h2 className="text-xl font-semibold mb-4">{course.title}</h2>
                   <p className="text-gray-600">{course.description}</p>
                 </div>
-                <div>
-                  <h4 className="font-medium text-gray-700">Instructor:</h4>
-                  <p className="text-gray-600">{course.author}</p>
+
+                {/* Detailed Content Card */}
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  {renderMarkdown(course.detailedContent)}
                 </div>
               </div>
-            </div>
+            </>
+          )}
+
+          {/* Navigation Buttons - Only for Course Navigation */}
+          <div className="flex justify-between mt-8">
+            <button
+              onClick={() => handleCourseNavigation('prev')}
+              disabled={!previousCourseId}
+              className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-colors ${
+                !previousCourseId
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+              </svg>
+              PREVIOUS COURSE
+            </button>
+
+            <button
+              onClick={() => handleCourseNavigation('next')}
+              disabled={!nextCourseId}
+              className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-colors ${
+                !nextCourseId
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
+            >
+              NEXT COURSE
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between mt-8">
-            <button className="px-4 py-2 bg-gray-200 rounded-lg flex items-center">
-              <span>← PREVIOUS</span>
-            </button>
-            <button className="px-4 py-2 bg-gray-200 rounded-lg flex items-center">
-              <span>NEXT →</span>
-            </button>
+          {/* Course Progress Indicator */}
+          <div className="mt-4 text-center text-sm text-gray-600">
+            <div>
+              Course {currentCourseId} of {cardsData.length}
+            </div>
           </div>
         </div>
       </div>

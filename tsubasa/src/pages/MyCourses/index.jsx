@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const MyCourses = () => {
   // State management
-  const [date, setDate] = useState(new Date());
   const [showNotifications, setShowNotifications] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [todos, setTodos] = useState([
     { id: 1, text: "Complete React Basics", completed: false },
     { id: 2, text: "Review JavaScript Arrays", completed: true },
@@ -53,7 +53,6 @@ const MyCourses = () => {
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
   };
-
   const handleAddTodo = (e) => {
     e.preventDefault();
     if (!newTodo.trim()) return;
@@ -86,59 +85,7 @@ const MyCourses = () => {
 
   return (
     <div className="h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b">
-        <img
-          src="https://images-platform.99static.com//KlBLMX8dQrcq6hZGnxf5HSnG29I=/8x543:525x1060/fit-in/500x500/99designs-contests-attachments/123/123360/attachment_123360235"
-          alt="Logo"
-          className="w-[50px] h-[50px] object-cover rounded-full"
-        />
-
-        <div className="flex items-center gap-4">
-          <div className="relative hidden md:block">
-            <Input
-              type="text"
-              placeholder="Search courses..."
-              className="w-[200px] lg:w-[300px] pl-10"
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => {
-              /* Handle mobile search */
-            }}
-          >
-            <Search className="h-6 w-6" />
-          </Button>
-
-          <div className="relative">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleNotificationClick}
-            >
-              <Bell className="h-6 w-6" />
-            </Button>
-            {showNotifications && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border p-4 z-50">
-                <h3 className="font-medium mb-2">Notifications</h3>
-                <div className="space-y-2">
-                  <p className="text-sm">New lesson available in React</p>
-                  <p className="text-sm">Complete your JavaScript quiz</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <Button variant="ghost" size="icon">
-            <Settings className="h-6 w-6" />
-          </Button>
-        </div>
-      </div>
+      
 
       {/* Main Content and Sidebar Layout */}
       <div className="flex flex-grow gap-4">
