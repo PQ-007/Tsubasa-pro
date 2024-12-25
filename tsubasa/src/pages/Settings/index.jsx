@@ -1,5 +1,9 @@
-const Settings = () => {
-  return <div>Settings</div>;
-};
+import React from 'react'
 
-export default Settings;
+const Settings = () => {
+  return (
+    <div>Settings</div>
+  )
+}
+
+export default Settings

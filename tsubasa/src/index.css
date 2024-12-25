@@ -96,3 +96,6 @@ textarea,
 input {
   user-select: text; /* Allow text selection for editable elements */
 }
+body::-webkit-scrollbar {
+  display: none; /* Hides scrollbar */
+}
