@@ -89,21 +89,32 @@ const MyCourses = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b">
         <img
-          src="/path-to-your-logo.png"
+          src="https://images-platform.99static.com//KlBLMX8dQrcq6hZGnxf5HSnG29I=/8x543:525x1060/fit-in/500x500/99designs-contests-attachments/123/123360/attachment_123360235"
           alt="Logo"
-          className="w-[100px] h-[50px] object-contain"
+          className="w-[50px] h-[50px] object-cover rounded-full"
         />
 
-        <div className="relative w-[300px]">
-          <Input
-            type="text"
-            placeholder="Search courses..."
-            className="pl-10"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-        </div>
-
         <div className="flex items-center gap-4">
+          <div className="relative hidden md:block">
+            <Input
+              type="text"
+              placeholder="Search courses..."
+              className="w-[200px] lg:w-[300px] pl-10"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => {
+              /* Handle mobile search */
+            }}
+          >
+            <Search className="h-6 w-6" />
+          </Button>
+
           <div className="relative">
             <Button
               variant="ghost"
@@ -122,6 +133,7 @@ const MyCourses = () => {
               </div>
             )}
           </div>
+
           <Button variant="ghost" size="icon">
             <Settings className="h-6 w-6" />
           </Button>
@@ -129,8 +141,8 @@ const MyCourses = () => {
       </div>
 
       {/* Main Content and Sidebar Layout */}
-      <div className="flex flex-grow">
-        <div className="flex flex-col basis-11/12 p-4">
+      <div className="flex flex-grow gap-4">
+        <div className="flex flex-col basis-3/4 p-4">
           {/* Progress Section */}
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-4">Your Progress</h2>
@@ -152,7 +164,7 @@ const MyCourses = () => {
           {/* Enrolled Courses */}
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-4">Enrolled Courses</h2>
-            <div className="grid gap-4">
+            <div className="grid gap-8">
               {enrolledCourses.map((course) => (
                 <div
                   key={course.id}
@@ -223,22 +235,48 @@ const MyCourses = () => {
             </div>
           </div>
 
-          <Button className="w-[150px] h-[50px]">Browse Catalog</Button>
+          <Button className="w-[150px] h-[50px]">Browse Courses</Button>
         </div>
 
-        <div className="flex flex-col basis-1/4 p-4">
-          <div className="border rounded-md p-2">
+        <div className="flex flex-col basis-1/4 p-4 ">
+          {/* Calendar */}
+          <div className="border rounded-lg p-4 bg-white mb-4">
             <Calendar
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md"
+              className="w-full"
+              classNames={{
+                months:
+                  "w-full flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                month: "w-full space-y-4",
+                table: "w-full border-collapse space-y-1",
+                head_row: "flex w-full",
+                head_cell:
+                  "w-full text-muted-foreground rounded-md font-normal text-[0.8rem]",
+                row: "flex w-full mt-2",
+                cell: "relative w-full h-9 p-0 text-center text-sm focus-within:relative focus-within:z-20",
+                day: "h-9 w-9 p-0 mx-auto font-normal aria-selected:opacity-100",
+                day_selected:
+                  "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                day_today: "bg-accent text-accent-foreground",
+                day_outside: "text-muted-foreground opacity-50",
+                day_disabled: "text-muted-foreground opacity-50",
+                day_hidden: "invisible",
+                nav: "space-x-1 flex items-center justify-between px-1",
+                nav_button:
+                  "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+                nav_button_previous: "absolute left-1",
+                nav_button_next: "absolute right-1",
+                caption:
+                  "flex justify-center pt-1 relative items-center text-sm font-medium",
+              }}
             />
           </div>
 
-          {/* To-do List Section with Navigation */}
-          <div className="border rounded-md p-2 h-[150px] overflow-auto">
-            <div className="flex justify-between items-center mb-2">
+          {/* To-do List Section */}
+          <div className="border rounded-lg p-4 bg-white">
+            <div className="flex justify-between items-center mb-4">
               <h3 className="font-medium">To-Do List</h3>
               <Button variant="ghost" size="sm" onClick={handleTodoClick}>
                 View All
@@ -286,9 +324,9 @@ const MyCourses = () => {
             </div>
           </div>
 
-          {/* Flashcard Section with Navigation */}
-          <div className="border rounded-md p-2 h-[150px]">
-            <div className="flex justify-between items-center mb-2">
+          {/* Flashcard Section */}
+          <div className="border rounded-lg p-4 bg-white">
+            <div className="flex justify-between items-center mb-4">
               <h3 className="font-medium">Flashcards</h3>
               <Button variant="ghost" size="sm" onClick={handleFlashcardsClick}>
                 View All
