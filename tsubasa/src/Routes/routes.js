@@ -1,14 +1,17 @@
 import MyCourses from "@/pages/MyCourses";
 import Dashboard from "@/pages/Dashboard";
 import Courses from "@/pages/Courses";
-import Settings from "@/pages/Settings";
+import Account from "@/pages/Account";
 import TodoListPage from "@/pages/TodoList";
 import FlashcardPage from "@/pages/Flashcards";
 import CourseDetail from "@/pages/Courses/CourseDetail";
-import { MdOutlineDashboard, MdOutlineSettings } from "react-icons/md";
+import { MdOutlineDashboard } from "react-icons/md";
 import { LuGraduationCap } from "react-icons/lu";
 import { PiLightbulbFilament } from "react-icons/pi";
-
+import { CircleUser } from "lucide-react";
+import Settings from "@/pages/Settings";
+import login from "@/components/login";
+import register from "@/components/register";
 // Main routes (shown in sidebar)
 const routes = [
   {
@@ -30,10 +33,10 @@ const routes = [
     name: "MyCourses",
   },
   {
-    path: "/settings",
-    component: Settings,
-    icon: MdOutlineSettings,
-    name: "Settings",
+    path: "/accout",
+    component: Account,
+    icon: CircleUser,
+    name: "Account",
   },
 ];
 
@@ -50,6 +53,18 @@ export const hiddenRoutes = [
   {
     path: "/courses/:courseId",
     component: CourseDetail,
+  },
+  {
+    path: "/settings",
+    component: Settings,
+  },
+  {
+    path: "/login",
+    component: login,
+  },
+  {
+    path: "register",
+    component: register,
   },
 ];
 
