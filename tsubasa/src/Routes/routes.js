@@ -12,6 +12,8 @@ import { CircleUser } from "lucide-react";
 import Settings from "@/pages/Settings";
 import login from "@/components/login";
 import register from "@/components/register";
+import { compareAsc } from "date-fns";
+import Profile from "@/pages/Account/Profile";
 // Main routes (shown in sidebar)
 const routes = [
   {
@@ -63,9 +65,13 @@ export const hiddenRoutes = [
     component: login,
   },
   {
-    path: "register",
+    path: "/register",
     component: register,
   },
+  {
+    path: "/profile",
+    component: Profile,
+  }
 ];
 
 export default routes;
