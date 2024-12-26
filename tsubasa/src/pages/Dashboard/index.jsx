@@ -26,7 +26,7 @@ const Dashboard = () => {
             {/* four stat card */}
             <div className="flex w-full justify-between gap-y-6 flex-wrap">
               {stats.map(({ name, value, icon : Icon }) => (
-                <Card className="md:w-48 lg:w-56 xl:w-80">
+                <Card className="md:w-48 lg:w-56 xl:w-56">
                   <CardHeader className="flex-row p-3  items-center ">
                     <div className="bg-[#2d9cdb] rounded-md"><Icon color="white" className=" p-[1px]" /></div>
                     <CardTitle className="text-l pl-1">{name}</CardTitle>
